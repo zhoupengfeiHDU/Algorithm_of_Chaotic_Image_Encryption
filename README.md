@@ -1,7 +1,7 @@
 # Chaotic_Image_Encryption
 C++ codes based on OpenCV Library
 
-编译环境为Visual Studio Community 2017 版本号: 15.7.4
+编译环境为Visual Studio Community 2017 版本号：15.7.4
 
 OpenCV库版本为:opencv-3.4.1-vc14_vc15
 
