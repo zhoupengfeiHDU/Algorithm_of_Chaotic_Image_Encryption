@@ -1,9 +1,9 @@
 # Chaotic_Image_Encryption
 C++ codes based on OpenCV Library
 
-编译环境为Visual Studio Community 2017 版本号：15.7.4
+编译环境为Visual Studio Community 2017 版本号: 15.7.4
 
-OpenCV库版本为:opencv-3.4.1-vc14_vc15
+OpenCV库版本为: opencv-3.4.1-vc14_vc15
 
 ## 概览
 <!-- vim-markdown-toc GFM -->
@@ -37,7 +37,7 @@ OpenCV库版本为:opencv-3.4.1-vc14_vc15
 
 * 该项目可进行下一步拓展，通过RGB与YUV色彩空间转换原理，将视频传输的YUV数据转换成RGB数据进行加密
 
-* C, C++良好的跨平台兼容性可使其能够拓展至嵌入式等平台，拓展适用于实时、非实时的视频加密
+* C，C++良好的跨平台兼容性可使其能够拓展至嵌入式等平台，拓展适用于实时、非实时的视频加密
 
 
 
