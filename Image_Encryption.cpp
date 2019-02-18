@@ -18,7 +18,7 @@ void array_rightshift(vector<int> &, int &);
 
 int main()
 {
-	Mat lena = imread("princess.tif", IMREAD_COLOR);
+	Mat lena = imread("lena512color.tiff", IMREAD_COLOR);
 	//读取图像行列及通道数
 	int row_size = lena.rows;
 	int cols_size = lena.cols;
@@ -245,12 +245,12 @@ int main()
 		}
 	}
 
-	namedWindow("LittlePricess_Original", WINDOW_AUTOSIZE);
-	imshow("LittlePricess_Original", lena);
-	namedWindow("LittlePricess_Encryption", WINDOW_AUTOSIZE);
-	imshow("LittlePricess_Encryption", encryption_lena);
-	namedWindow("LittlePricess_Decryption", WINDOW_AUTOSIZE);
-	imshow("LittlePricess_Decryption", decryption_lena);
+	namedWindow("Lena_Original", WINDOW_AUTOSIZE);
+	imshow("Lena_Original", lena);
+	namedWindow("Lena_Encryption", WINDOW_AUTOSIZE);
+	imshow("Lena_Encryption", encryption_lena);
+	namedWindow("Lena_Decryption", WINDOW_AUTOSIZE);
+	imshow("Lena_Decryption", decryption_lena);
 	//delay 60000ms
 	waitKey(60000);
 
