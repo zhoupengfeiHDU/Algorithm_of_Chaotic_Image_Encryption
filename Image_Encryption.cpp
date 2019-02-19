@@ -99,13 +99,16 @@ int main()
 	{
 		for (int i = 0; i < row_size; i++)
 		{
+			//读取图像矩阵的行数据到lenarow数组
 			for (int j = 0; j < cols_size; j++)
 			{
 				lenarow[j] = lena.at<Vec3b>(i, j)[k];
 			}
-			//强制类型转换
+			//强制类型转换，根据x混沌序列中确定行移位的位数
 			num_shf = static_cast<int>(*(x_chaos + count_n));
+			//调用自定义的数组循环右移函数，对图像矩阵的行进行循环移位
 			array_rightshift(lenarow, num_shf);
+			//判断若为第一行，则直接与x混沌序列进行异或；不为第一行，则先与图像矩阵前一行异或再与x混沌序列异或
 			if (i == 0)
 			{
 				for (int j = 0; j < cols_size; j++)
@@ -113,8 +116,6 @@ int main()
 					//给加密像素矩阵赋值
 					int temp = lenarow[j] ^ static_cast<int>(*(x_chaos + count_n));
 					encryption_lena.at<Vec3b>(i, j)[k] = temp;
-
-					//encryption_lena.at<Vec3b>(i, j)[k] = lenarow[j];
 					count_n++;
 				}
 			}
@@ -126,8 +127,6 @@ int main()
 					int temp = lenarow[j] ^ static_cast<int>(encryption_lena.at<Vec3b>(i - 1, j)[k]);
 					temp = temp ^ static_cast<int>(*(x_chaos + count_n));
 					encryption_lena.at<Vec3b>(i, j)[k] = temp;
-
-					//encryption_lena.at<Vec3b>(i, j)[k] = lenarow[j];
 					count_n++;
 				}
 			}
@@ -143,13 +142,16 @@ int main()
 	{
 		for (int j = 0; j < cols_size; j++)
 		{
+			//读取图像矩阵的行数据到lenacols数组
 			for (int i = 0; i < row_size; i++)
 			{
 				lenacols[i] = encryption_lena.at<Vec3b>(i, j)[k];
 			}
-			//强制类型转换
+			//强制类型转换，根据y混沌序列中确定列移位的位数
 			num_shf = static_cast<int>(*(y_chaos + count_m));
+			//调用自定义的数组循环右移函数，对图像矩阵的列进行循环移位
 			array_rightshift(lenacols, num_shf);
+			//判断若为第一列，则直接与y混沌序列进行异或；不为第一列，则先与图像矩阵前一列异或再与y混沌序列异或
 			if (j == 0)
 			{
 				for (int i = 0; i < row_size; i++)
@@ -174,15 +176,16 @@ int main()
 
 		}
 	}
-
 	count_m--;
 	//解密操作
 	//进行列解密
 	Mat decryption_lena = encryption_lena.clone();
+	//反向逐列遍历加密图像矩阵
 	for (int k = alpha_size-1; k >= 0; k--)
 	{
 		for (int j = cols_size - 1; j >= 0; j--)
 		{
+			//判断是否为第一列，执行与加密相反的操作
 			if (j == 0)
 			{
 				for (int i = row_size - 1; i >= 0; i--)
@@ -211,17 +214,17 @@ int main()
 
 	count_n--;
 	//进行行解密
+	//反向逐行遍历加密图像矩阵
 	for (int k = alpha_size - 1; k >= 0; k--)
 	{
 		for (int i = row_size - 1; i >= 0; i--)
 		{
+			//判断是否为第一列，执行与加密相反的操作
 			if (i == 0)
 			{
 				for (int j = cols_size - 1; j >= 0; j--)
 				{
 					lenarow[j] = static_cast<int>(decryption_lena.at<Vec3b>(i, j)[k]) ^ static_cast<int>(*(x_chaos + count_n));
-
-					//lenarow[j] = decryption_lena.at<Vec3b>(i, j)[k];
 					count_n--;
 				}
 			}
@@ -231,8 +234,6 @@ int main()
 				{
 					lenarow[j] = static_cast<int>(decryption_lena.at<Vec3b>(i, j)[k]) ^ static_cast<int>(*(x_chaos + count_n));
 					lenarow[j] = lenarow[j] ^ static_cast<int>(decryption_lena.at<Vec3b>(i - 1, j)[k]);
-
-					//lenarow[j] = decryption_lena.at<Vec3b>(i, j)[k];
 					count_n--;
 				}
 			}
@@ -244,6 +245,7 @@ int main()
 			}
 		}
 	}
+	
 	//释放空间防止内存泄漏
 	//置空指针
 	delete[]x_chaos;
@@ -254,22 +256,25 @@ int main()
 	y_chaos = NULL;
 	z_chaos = NULL;
 	w_chaos = NULL;
-
+	
+	//定义三个窗口和窗口标题（原图，加密后和解密后）
 	namedWindow("Lena_Original", WINDOW_AUTOSIZE);
 	imshow("Lena_Original", lena);
 	namedWindow("Lena_Encryption", WINDOW_AUTOSIZE);
 	imshow("Lena_Encryption", encryption_lena);
 	namedWindow("Lena_Decryption", WINDOW_AUTOSIZE);
 	imshow("Lena_Decryption", decryption_lena);
-	//delay 60000ms
+	//使窗口延时 60000ms
 	waitKey(60000);
-
+	
 	return 0;
 }
 
 //定义vec数组循环右移函数
 void array_rightshift(vector<int> &a, int &N)
 {
+	//采用空间换时间，构建等长临时数组
+	//将原数组后num_shift1位（移位位数）元素放置临时数组前面，将原数组前面的元素放置临时数组后面，将临时数组赋值给原数组
 	int bitnum = static_cast<int>(a.size());
 	int num_shift1 = N % bitnum;
 	vector<int> temp(bitnum);
