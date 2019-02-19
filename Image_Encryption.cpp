@@ -244,6 +244,16 @@ int main()
 			}
 		}
 	}
+	//释放空间防止内存泄漏
+	//置空指针
+	delete[]x_chaos;
+	delete[]y_chaos;
+	delete[]z_chaos;
+	delete[]w_chaos;
+	x_chaos = NULL;
+	y_chaos = NULL;
+	z_chaos = NULL;
+	w_chaos = NULL;
 
 	namedWindow("Lena_Original", WINDOW_AUTOSIZE);
 	imshow("Lena_Original", lena);
