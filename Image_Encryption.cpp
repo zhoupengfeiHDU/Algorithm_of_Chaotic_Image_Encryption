@@ -13,8 +13,28 @@
 #define PI 3.141592658
 using namespace std;
 using namespace cv;
-//声明vec数组循环右移函数
-void array_rightshift(vector<int> &, int &);
+//定义vec数组循环右移函数
+template <typename T>
+void array_rightshift(vector<T> &a, int &N)
+{
+	//采用空间换时间，构建等长临时数组
+	//将原数组后num_shift1位（移位位数）元素放置临时数组前面，将原数组前面的元素放置临时数组后面，将临时数组赋值给原数组
+	int bitnum = static_cast<int>(a.size());
+	int num_shift1 = N % bitnum;
+	vector<T> temp(bitnum);
+	for (int i = 0; i < num_shift1; i++)
+	{
+		temp[i] = a[bitnum - num_shift1 + i];
+	}
+	for (int j = 0; j < bitnum - num_shift1; j++)
+	{
+		temp[j + num_shift1] = a[j];
+	}
+	for (int k = 0; k < bitnum; k++)
+	{
+		a[k] = temp[k];
+	}
+}
 
 int main()
 {
@@ -270,26 +290,5 @@ int main()
 	return 0;
 }
 
-//定义vec数组循环右移函数
-void array_rightshift(vector<int> &a, int &N)
-{
-	//采用空间换时间，构建等长临时数组
-	//将原数组后num_shift1位（移位位数）元素放置临时数组前面，将原数组前面的元素放置临时数组后面，将临时数组赋值给原数组
-	int bitnum = static_cast<int>(a.size());
-	int num_shift1 = N % bitnum;
-	vector<int> temp(bitnum);
-	for (int i = 0; i < num_shift1; i++)
-	{
-		temp[i] = a[bitnum - num_shift1 + i];
-	}
-	for (int j = 0; j < bitnum - num_shift1; j++)
-	{
-		temp[j + num_shift1] = a[j];
-	}
-	for (int k = 0; k < bitnum; k++)
-	{
-		a[k] = temp[k];
-	}
-}
 
 
